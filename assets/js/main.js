@@ -19,8 +19,59 @@ function convertPokemonToLi(pokemon) {
                 <img src="${pokemon.photo}"
                     alt="${pokemon.name}">
             </div>
+            <button class="more-details" onclick="loadPokemonDetails('${
+              pokemon.name
+            }')">
+              Ver mais
+            </button>
         </li>
     `;
+}
+
+function showPokemonDetails(pokemonDetails) {
+  return `
+  <div class="container">
+    <div id="card">
+      <p class="hp">
+        <span>HP</span>
+        <span>${pokemonDetails.hp}</span>
+      </p>
+      <img src="${pokemonDetails.photo}" alt="${pokemonDetails.name}" >
+        <h2 class="poke-name">${pokemonDetails.name}</h2>
+        <ul class="types">
+          ${pokemonDetails.types
+            .map((type) => `<li class="type ${type}">${type}</li>`)
+            .join("")}
+        </ul>
+        <div class="stats">
+          <div>
+            <h3>${pokemonDetails.attack}</h3>
+            <p>Attack</p>
+          </div>
+          <div>
+            <h3>${pokemonDetails.defense}</h3>
+            <p>Defense</p>
+          </div>
+          <div>
+            <h3>${pokemonDetails.speed}</h3>
+            <p>Speed</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function loadPokemonDetails(pokemon) {
+  const url = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((jsonBody) => {
+      let pokemonDetails = createPokemonDetailsObject(jsonBody);
+      document.getElementById("pokemonDetails").innerHTML =
+        showPokemonDetails(pokemonDetails);
+    });
 }
 
 function loadPokemonItens(offset, limit) {
