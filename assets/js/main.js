@@ -5,6 +5,14 @@ const maxRecords = 151;
 const limit = 10;
 let offset = 0;
 
+var modal = new tingle.modal({
+  footer: true,
+  stickyFooter: false,
+  closeMethods: ["overlay", "button", "escape"],
+  closeLabel: "Close",
+  cssClass: ["custom-class-1", "custom-class-2"],
+});
+
 function convertPokemonToLi(pokemon) {
   return `
         <li class="pokemon ${pokemon.type}">
@@ -34,7 +42,7 @@ function showPokemonDetails(pokemonDetails) {
     <div id="card">
       <p class="hp">
         <span>HP</span>
-        <span>${pokemonDetails.hp}</span>
+        <span style="font-size: 1.5rem">${pokemonDetails.hp}</span>
       </p>
       <img src="${pokemonDetails.photo}" alt="${pokemonDetails.name}" >
         <h2 class="poke-name">${pokemonDetails.name}</h2>
@@ -69,8 +77,10 @@ function loadPokemonDetails(pokemon) {
     .then((response) => response.json())
     .then((jsonBody) => {
       let pokemonDetails = createPokemonDetailsObject(jsonBody);
-      document.getElementById("pokemonDetails").innerHTML =
-        showPokemonDetails(pokemonDetails);
+      document.getElementById("pokemonDetails").innerHTML = modal.setContent(
+        showPokemonDetails(pokemonDetails)
+      );
+      modal.open();
     });
 }
 
